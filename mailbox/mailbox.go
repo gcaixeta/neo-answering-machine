@@ -9,11 +9,15 @@
 package mailbox
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+var ErrNotFound = errors.New("mailbox: not found")
 
 type Mailbox struct {
 	id             uuid.UUID
@@ -21,6 +25,12 @@ type Mailbox struct {
 	createdAt      time.Time
 	lastListenedAt *time.Time
 	opensAt        *time.Time
+}
+
+type Repository interface {
+	Save(ctx context.Context, mb *Mailbox) error
+
+	FindByID(ctx context.Context, id uuid.UUID) (*Mailbox, error)
 }
 
 func NewMailbox(ownerID uuid.UUID, createdAt time.Time, opensAt *time.Time) (*Mailbox, error) {
@@ -40,4 +50,20 @@ func NewMailbox(ownerID uuid.UUID, createdAt time.Time, opensAt *time.Time) (*Ma
 
 func (m *Mailbox) SetOpeningTime(opensAt *time.Time) {
 	m.opensAt = opensAt
+}
+
+func (m *Mailbox) OwnerID() uuid.UUID {
+	return m.ownerID
+}
+
+func (m *Mailbox) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+func (m *Mailbox) LastListenedAt() *time.Time {
+	return m.lastListenedAt
+}
+
+func (m *Mailbox) OpensAt() *time.Time {
+	return m.opensAt
 }

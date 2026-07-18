@@ -6,11 +6,15 @@
 package tape
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+var ErrNotFound = errors.New("tape: not found")
 
 type Tape struct {
 	ID         uuid.UUID
@@ -21,7 +25,15 @@ type Tape struct {
 	playedAt   *time.Time
 }
 
-func NewTape(mailboxId, recordedBy uuid.UUID, recordedAt time.Time) (*Tape, error) {
+type Repository interface {
+	Save(ctx context.Context, tape *Tape) error
+
+	FindByID(ctx context.Context, id uuid.UUID) (*Tape, error)
+
+	ListByMailboxID(ctx context.Context, mailboxID uuid.UUID) ([]*Tape, error)
+}
+
+func NewTape(mailboxID, recordedBy uuid.UUID, recordedAt time.Time) (*Tape, error) {
 	id, err := uuid.NewV7()
 	if err != nil {
 		return nil, fmt.Errorf("tape: failed to generate id: %w", err)
@@ -29,10 +41,35 @@ func NewTape(mailboxId, recordedBy uuid.UUID, recordedAt time.Time) (*Tape, erro
 
 	return &Tape{
 		ID:         id,
-		mailboxID:  mailboxId,
+		mailboxID:  mailboxID,
 		recordedBy: recordedBy,
 		recordedAt: recordedAt,
 		played:     false,
 		playedAt:   nil,
 	}, nil
+}
+
+func (t *Tape) MarkPlayed(playedAt time.Time) {
+	t.playedAt = &playedAt
+	t.played = true
+}
+
+func (t *Tape) MailboxID() uuid.UUID {
+	return t.mailboxID
+}
+
+func (t *Tape) RecordedBy() uuid.UUID {
+	return t.recordedBy
+}
+
+func (t *Tape) RecordedAt() time.Time {
+	return t.recordedAt
+}
+
+func (t *Tape) Played() bool {
+	return t.played
+}
+
+func (t *Tape) PlayedAt() *time.Time {
+	return t.playedAt
 }
