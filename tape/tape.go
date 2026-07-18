@@ -1,3 +1,8 @@
+// Package tape implements the tapes stored inside a user's mailbox.
+//
+// A Tape represents a single voice message recorded by one user for another
+// mailbox's owner. Each Tape tracks who recorded it, when, and whether the
+// owner has played it yet. PlayedAt is nil until the tape is first played.
 package tape
 
 import (
@@ -10,7 +15,7 @@ import (
 type Tape struct {
 	ID         uuid.UUID
 	mailboxID  uuid.UUID
-	recordedBy uuid.UUID //references user id
+	recordedBy uuid.UUID // references user id
 	recordedAt time.Time
 	played     bool
 	playedAt   *time.Time

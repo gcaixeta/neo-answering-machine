@@ -1,3 +1,11 @@
+// Package mailbox implements the mailbox used to store the tapes sent for a unique user.
+//
+// A Mailbox belongs to a single owner and holds tapes recorded for them. Each
+// Mailbox has an opensAt time that determines when its tapes become available:
+// before that time, the owner's latest unlistened tapes stay locked. A nil
+// opensAt means the mailbox is open with no delay.
+//
+// LastListenedAt is nil until the owner listens to a tape for the first time.package mailbox
 package mailbox
 
 import (
@@ -8,22 +16,22 @@ import (
 )
 
 type Mailbox struct {
-	ID             uuid.UUID
+	id             uuid.UUID
 	ownerID        uuid.UUID
 	createdAt      time.Time
 	lastListenedAt *time.Time
 	opensAt        *time.Time
 }
 
-func NewMailbox(ownerId uuid.UUID, createdAt time.Time, opensAt *time.Time) (*Mailbox, error) {
+func NewMailbox(ownerID uuid.UUID, createdAt time.Time, opensAt *time.Time) (*Mailbox, error) {
 	id, err := uuid.NewV7()
 	if err != nil {
 		return nil, fmt.Errorf("mailbox: failed generating id: %w", err)
 	}
 
 	return &Mailbox{
-		ID:             id,
-		ownerID:        ownerId,
+		id:             id,
+		ownerID:        ownerID,
 		createdAt:      createdAt,
 		lastListenedAt: nil,
 		opensAt:        opensAt,
