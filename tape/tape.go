@@ -8,8 +8,8 @@ import (
 )
 
 type Tape struct {
-	id         uuid.UUID
-	mailboxId  uuid.UUID
+	ID         uuid.UUID
+	mailboxID  uuid.UUID
 	recordedBy uuid.UUID //references user id
 	recordedAt time.Time
 	played     bool
@@ -23,8 +23,8 @@ func NewTape(mailboxId, recordedBy uuid.UUID, recordedAt time.Time) (*Tape, erro
 	}
 
 	return &Tape{
-		id:         id,
-		mailboxId:  mailboxId,
+		ID:         id,
+		mailboxID:  mailboxId,
 		recordedBy: recordedBy,
 		recordedAt: recordedAt,
 		played:     false,
