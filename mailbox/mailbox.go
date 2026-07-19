@@ -5,7 +5,7 @@
 // before that time, the owner's latest unlistened tapes stay locked. A nil
 // opensAt means the mailbox is open with no delay.
 //
-// LastListenedAt is nil until the owner listens to a tape for the first time.package mailbox
+// LastListenedAt is nil until the owner listens to a tape for the first time.
 package mailbox
 
 import (

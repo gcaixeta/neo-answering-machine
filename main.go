@@ -1,20 +1,26 @@
-package neoansweringmachine
+package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/gcaixeta/neo-answering-machine/internal/api"
 	"github.com/gcaixeta/neo-answering-machine/internal/repository/postgres"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	const dsn = "blablabla"
+	const dsn = "postgres://neo:neo@localhost:5432/neo?sslmode=disable"
 
 	db, err := postgres.NewDB(dsn)
 	if err != nil {
-		fmt.Printf("Error trying to open connection with db: %w", err)
+		log.Fatalf("error opening db connection: %v", err)
 	}
+	defer db.Close()
 
 	mailboxRepo := postgres.NewMailboxRepository(db)
-	api.NewRouter(mailboxRepo)
+	mux := api.NewRouter(mailboxRepo)
+
+	log.Println("listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }

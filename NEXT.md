@@ -40,15 +40,15 @@ Decisões já tomadas:
 
 ### 3. `internal/api/` (pacote novo do controller)
 
-- [ ] `router.go`: `NewRouter(mailboxes mailbox.Repository, tapes
-  tape.Repository) *http.ServeMux` registrando as rotas abaixo.
-- [ ] `mailbox_handlers.go`: handlers de mailbox.
+- [x] `router.go`: `NewRouter(mailboxes mailbox.Repository, tapes
+tape.Repository) *http.ServeMux` registrando as rotas abaixo.
+- [x] `mailbox_handlers.go`: handlers de mailbox.
 - [ ] `tape_handlers.go`: handlers de tape.
 - [ ] `dto.go`: structs de request/response com `json:"..."` + conversão
       de/para os tipos de domínio via os getters do passo 1/2 (nunca acessar
       campo privado diretamente).
 - [ ] `respond.go`: helpers `writeJSON(w, status, v)` e `writeError(w,
-  status, err)`.
+status, err)`.
 
 Rotas:
 

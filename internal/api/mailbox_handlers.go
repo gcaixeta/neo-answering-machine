@@ -34,10 +34,11 @@ func (h *MailboxHandler) Create(w http.ResponseWriter, r *http.Request) {
 	// Saves it to the database
 	if err := h.repo.Save(r.Context(), m); err != nil {
 		http.Error(w, "failed to save mailbox", http.StatusInternalServerError)
+		return
 	}
 
 	// Return the response with status code 201
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(m)
+	json.NewEncoder(w).Encode(newMailboxResponse(m))
 }
