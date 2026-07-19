@@ -52,6 +52,10 @@ func (m *Mailbox) SetOpeningTime(opensAt *time.Time) {
 	m.opensAt = opensAt
 }
 
+func (m *Mailbox) ID() uuid.UUID {
+	return m.id
+}
+
 func (m *Mailbox) OwnerID() uuid.UUID {
 	return m.ownerID
 }
@@ -66,4 +70,14 @@ func (m *Mailbox) LastListenedAt() *time.Time {
 
 func (m *Mailbox) OpensAt() *time.Time {
 	return m.opensAt
+}
+
+func Reconstruct(id, ownerID uuid.UUID, createdAt time.Time, lastListenedAt, opensAt *time.Time) *Mailbox {
+	return &Mailbox{
+		id:             id,
+		ownerID:        ownerID,
+		createdAt:      createdAt,
+		lastListenedAt: lastListenedAt,
+		opensAt:        opensAt,
+	}
 }
