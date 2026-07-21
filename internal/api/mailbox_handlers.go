@@ -40,5 +40,10 @@ func (h *MailboxHandler) Create(w http.ResponseWriter, r *http.Request) {
 	// Return the response with status code 201
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(newMailboxResponse(m))
+	err = json.NewEncoder(w).Encode(newMailboxResponse(m))
+	if err != nil {
+		http.Error(w, "failed to encode the response", http.StatusInternalServerError)
+	}
 }
+
+func (h *MailboxHandler) GetByID(w http.ResponseWriter, r *http.Request) {}

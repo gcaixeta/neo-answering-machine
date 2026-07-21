@@ -13,5 +13,7 @@ func NewRouter(mailboxes mailbox.Repository) *http.ServeMux {
 	h := &MailboxHandler{repo: mailboxes}
 	mux.HandleFunc("POST /mailbox", h.Create)
 
+	mux.HandleFunc("GET /mailbox/{id}", h.GetByID)
+
 	return mux
 }
