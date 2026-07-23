@@ -5,15 +5,20 @@ import (
 	"net/http"
 
 	"github.com/gcaixeta/neo-answering-machine/mailbox"
+	"github.com/gcaixeta/neo-answering-machine/tape"
 )
 
-func NewRouter(mailboxes mailbox.Repository) *http.ServeMux {
+func NewRouter(mailboxes mailbox.Repository, tapes tape.Repository) *http.ServeMux {
 	mux := http.NewServeMux()
 
-	h := &MailboxHandler{repo: mailboxes}
-	mux.HandleFunc("POST /mailbox", h.Create)
+	mh := &MailboxHandler{repo: mailboxes}
+	th := &TapeHandler{repo: tapes}
 
-	mux.HandleFunc("GET /mailbox/{id}", h.GetByID)
+	mux.HandleFunc("POST /mailbox", mh.Create)
+
+	mux.HandleFunc("GET /mailbox/{id}", mh.GetByID)
+
+	mux.HandleFunc("POST /tape/upload", th.UploadNewTape)
 
 	return mux
 }

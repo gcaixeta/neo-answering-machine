@@ -20,19 +20,6 @@ type scanner interface {
 	Scan(dest ...any) error
 }
 
-func NewDB(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("postgres", dsn)
-	if err != nil {
-		return nil, fmt.Errorf("postgres: error openning connection with database: %w", err)
-	}
-
-	if err := db.Ping(); err != nil {
-		return nil, fmt.Errorf("postgres: ping: %w", err)
-	}
-
-	return db, nil
-}
-
 func NewMailboxRepository(db *sql.DB) *MailboxRepository {
 	return &MailboxRepository{db: db}
 }
@@ -63,7 +50,7 @@ func (r *MailboxRepository) FindByID(ctx context.Context, id uuid.UUID) (*mailbo
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("mailbox: findByID: %w", err)
+		return nil, fmt.Errorf("mailbox: FindByID: %w", err)
 	}
 
 	return m, nil

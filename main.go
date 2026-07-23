@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	const dsn = "postgres://neo:neo@localhost:5432/neo?sslmode=disable"
+	const dsn = "postgres://neo:neo@localhost:5439/neo?sslmode=disable"
 
 	db, err := postgres.NewDB(dsn)
 	if err != nil {
@@ -19,7 +19,8 @@ func main() {
 	defer db.Close()
 
 	mailboxRepo := postgres.NewMailboxRepository(db)
-	mux := api.NewRouter(mailboxRepo)
+	tapeRepo := postgres.NewTapeRepository(db)
+	mux := api.NewRouter(mailboxRepo, tapeRepo)
 
 	log.Println("listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))

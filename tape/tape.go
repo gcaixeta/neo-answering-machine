@@ -73,3 +73,14 @@ func (t *Tape) Played() bool {
 func (t *Tape) PlayedAt() *time.Time {
 	return t.playedAt
 }
+
+func Reconstruct(id, mailboxID, recordedBy uuid.UUID, recordedAt time.Time, played bool, playedAt *time.Time) *Tape {
+	return &Tape{
+		ID:         id,
+		mailboxID:  mailboxID,
+		recordedBy: recordedBy,
+		recordedAt: recordedAt,
+		played:     played,
+		playedAt:   playedAt,
+	}
+}
